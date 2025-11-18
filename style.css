@@ -1,0 +1,185 @@
+/* --- Base, Container, Start Screen, Next Button, and Results Styles (Same as before) --- */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 90%;
+}
+
+h1 {
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Start Screen & Start Button Styling */
+#start-screen {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+#start-btn {
+    width: 80%;
+    padding: 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2em;
+    margin-top: 20px;
+    transition: background-color 0.2s;
+}
+
+#start-btn:hover {
+    background-color: #1e7e34;
+}
+
+/* Quiz Box Content Styling */
+#quiz-box {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.expression {
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #ff5722;
+    text-align: center;
+    margin: 15px 0 25px 0;
+}
+
+/* --- New Input and Button Styling --- */
+#input-area {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+#answer-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+#submit-btn {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s;
+}
+
+#submit-btn:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+#submit-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+/* Feedback Box Styling */
+.feedback-box {
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.correct-feedback {
+    background-color: #e6f9e6; /* Light Green */
+    color: #1e7e34; /* Dark Green */
+    border: 2px solid #1e7e34;
+}
+
+.incorrect-feedback {
+    background-color: #f9e6e6; /* Light Red */
+    color: #bd2130; /* Dark Red */
+    border: 2px solid #bd2130;
+}
+
+
+/* Next Button */
+#next-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.2s;
+}
+
+#next-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Results Section (Game Over) */
+#results {
+    text-align: center;
+    padding: 30px;
+    border: 3px solid #28a745;
+    border-radius: 10px;
+    margin-top: 20px;
+    background-color: #e2f0e9;
+}
+
+#results h2 {
+    color: #28a745;
+    font-size: 2em;
+    margin-top: 0;
+}
+
+#score-display {
+    font-weight: bold;
+    color: #0056b3;
+    font-size: 1.5em;
+}
+
+#results button {
+    padding: 12px 25px;
+    margin-top: 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.2s;
+}
+
+#results button:hover {
+    background-color: #1e7e34;
+}

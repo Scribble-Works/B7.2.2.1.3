@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exponent Input Algebra Challenge</title>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>✍️ Algebra Challenge</h1>
+        
+        <div id="start-screen">
+            <p>For each problem, simplify the expression completely and type your final answer into the box provided.</p>
+            <p>Important: Use the caret symbol (`^`) for exponents (e.g., type 4x^3 for $4x^3$).</p>
+            <p>There are 10 questions.</p>
+            <button id="start-btn" onclick="startGame()">Start Game</button>
+        </div>
+
+        <div id="quiz-box" class="hidden">
+            <div id="input-area">
+                <input type="text" id="answer-input" placeholder="Type your simplified answer here (use ^ for exponents)" onkeydown="if(event.key === 'Enter') checkAnswer();">
+                <button id="submit-btn" onclick="checkAnswer()">Check Answer</button>
+            </div>
+            
+            <div id="feedback" class="feedback-box hidden"></div>
+        </div>
+
+        <button id="next-btn" class="hidden" onclick="nextQuestion()">Next Question</button>
+        
+        <div id="results" class="hidden">
+            <h2>Quiz Complete!</h2>
+            <p>You scored: <span id="score-display">0</span> out of 10.</p>
+            <button onclick="location.reload()">Play Again</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
