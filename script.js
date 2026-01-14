@@ -1,4 +1,4 @@
-// --- Utility Function for Answer Normalization (No Change) ---
+// --- Utility Function for Answer Normalization ---
 function normalizeAnswer(answer) {
     if (!answer) return "";
     
@@ -18,7 +18,7 @@ function normalizeAnswer(answer) {
     return normalized;
 }
 
-// Data structure for the 10 questions (No Change)
+// Data structure for the 10 questions
 const questions = [
     {
         id: 1,
@@ -76,10 +76,22 @@ let currentQuestionIndex = 0;
 let score = 0;
 let answered = false;
 
+// DOM Elements
 const startScreen = document.getElementById('start-screen');
 const quizBox = document.getElementById('quiz-box');
 const nextBtn = document.getElementById('next-btn');
 const resultsScreen = document.getElementById('results');
+
+// 🔊 SOUND HELPER (safe playback)
+function playSound(soundId) {
+    const sound = document.getElementById(soundId);
+    if (sound) {
+        sound.currentTime = 0;
+        sound.play().catch(() => {
+            // Ignore autoplay errors (allowed after user interaction)
+        });
+    }
+}
 
 function getCurrentElements() {
     return {
@@ -92,108 +104,95 @@ function getCurrentElements() {
 // --- Game Control Functions ---
 
 function startGame() {
+    currentQuestionIndex = 0;
+    score = 0;
     startScreen.classList.add('hidden');
     quizBox.classList.remove('hidden');
-    nextBtn.classList.add('hidden'); 
+    nextBtn.classList.add('hidden');
     displayQuestion();
 }
 
 function displayQuestion() {
-    answered = false;
-    nextBtn.classList.add('hidden');
-    
     if (currentQuestionIndex >= questions.length) {
         showResults();
         return;
     }
+
+    answered = false;
+    nextBtn.classList.add('hidden');
     
     const q = questions[currentQuestionIndex];
+    const placeholderText = "Example: Type 4x^3 for the answer 4x³";
     
-    // --- CRITICAL CHANGE: The placeholder includes the clear instruction ---
-    const placeholderText = "Example: Type 4x^3 for the answer 4x³"; 
-    
-    // Insert the new HTML for the question
     quizBox.innerHTML = `
         <h3>Question ${q.id} of 10</h3>
         <p>Simplify the following expression completely:</p>
         <div class="expression">$$${q.expression}$$</div>
-        
         <div id="input-area">
             <input type="text" id="answer-input" placeholder="${placeholderText}" onkeydown="if(event.key === 'Enter') checkAnswer();">
             <button id="submit-btn" onclick="checkAnswer()">Check Answer</button>
         </div>
         <div id="feedback" class="feedback-box hidden"></div>
     `;
-    
-    // Get fresh references to the newly created elements
-    const { input } = getCurrentElements();
 
-    // Re-run MathJax rendering
-    if (window.MathJax) {
-        MathJax.typesetPromise([quizBox]);
-    }
-    
-    // Focus the input field
-    if (input) {
-        input.focus();
+    const { input } = getCurrentElements();
+    if (input) input.focus();
+
+    // ✅ Render LaTeX
+    if (typeof MathJax !== 'undefined') {
+        MathJax.typesetPromise([quizBox]).catch(console.warn);
     }
 }
 
 function checkAnswer() {
-    if (answered) return; 
+    if (answered) return;
 
-    // Get fresh references for the check
     const { input, submit, feedback } = getCurrentElements();
+    if (!input || !submit || !feedback) return;
 
-    const studentAnswer = input ? input.value : '';
+    const studentAnswer = input.value.trim();
     if (!studentAnswer) {
-        alert("Please enter an answer before checking.");
+        feedback.textContent = "Please enter an answer.";
+        feedback.className = "feedback-box incorrect-feedback";
+        feedback.classList.remove('hidden');
         return;
     }
 
     const q = questions[currentQuestionIndex];
-    
     const studentNormalized = normalizeAnswer(studentAnswer);
     const correctNormalized = normalizeAnswer(q.correctAnswer);
-    
+
     answered = true;
     submit.disabled = true;
     nextBtn.classList.remove('hidden');
-    feedback.classList.remove('hidden');
 
     if (studentNormalized === correctNormalized) {
         score++;
-        feedback.classList.remove('incorrect-feedback');
-        feedback.classList.add('correct-feedback');
+        feedback.className = "feedback-box correct-feedback";
         feedback.innerHTML = '✅ Correct! Great job simplifying.';
+        playSound('correct-sound'); // ✅
     } else {
-        feedback.classList.remove('correct-feedback');
-        feedback.classList.add('incorrect-feedback');
-        
-        // Use MathJax to render the correct answer clearly
+        feedback.className = "feedback-box incorrect-feedback";
         feedback.innerHTML = `❌ Incorrect. The correct simplified answer is: $$${q.correctAnswer}$$`;
+        playSound('wrong-sound'); // ❌
         
-        if (window.MathJax) {
-            MathJax.typesetPromise([feedback]);
+        // Re-render LaTeX in feedback
+        if (typeof MathJax !== 'undefined') {
+            MathJax.typesetPromise([feedback]).catch(console.warn);
         }
     }
+    feedback.classList.remove('hidden');
 }
 
 function nextQuestion() {
-    if (!answered) return; 
-    
+    if (!answered) return;
     currentQuestionIndex++;
     displayQuestion();
 }
 
 function showResults() {
-    const currentQuizBox = document.getElementById('quiz-box');
-    const currentNextBtn = document.getElementById('next-btn');
-    const currentResultsScreen = document.getElementById('results');
-
-    currentQuizBox.classList.add('hidden');
-    currentNextBtn.classList.add('hidden');
-    
+    quizBox.classList.add('hidden');
+    nextBtn.classList.add('hidden');
     document.getElementById('score-display').textContent = score;
-    currentResultsScreen.classList.remove('hidden');
+    resultsScreen.classList.remove('hidden');
 }
